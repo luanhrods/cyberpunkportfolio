@@ -335,7 +335,12 @@ export default function FuturisticPortfolio() {
   const sections = ["home", "portfolio", "resume", "contact"]
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000)
+    // Define o título da página no navegador
+    document.title = "Luan Chicale - Portfólio"
+  }, [])
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1500) // Animação de loading mais rápida
     return () => clearTimeout(timer)
   }, [])
 
@@ -348,9 +353,9 @@ export default function FuturisticPortfolio() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
-          <div className="w-16 h-16 border-4 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-teal-400 text-xl font-light">Initializing Portfolio...</p>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
+          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-yellow-400 text-xl font-light">Inicializando Portfólio...</p>
         </motion.div>
       </div>
     )
@@ -362,102 +367,61 @@ export default function FuturisticPortfolio() {
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
         <div className="particles-container">
-          {[...Array(50)].map((_, i) => (
+          {[...Array(30)].map((_, i) => ( // Menos partículas
             <div
               key={i}
               className="particle"
               style={{
                 left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 20}s`,
-                animationDuration: `${20 + Math.random() * 20}s`,
+                animationDelay: `${Math.random() * 25}s`,
+                animationDuration: `${25 + Math.random() * 25}s`, // Animação mais lenta
               }}
             ></div>
           ))}
         </div>
       </div>
 
-      {/* Desktop Floating Sidebar */}
+      {/* Desktop Floating Sidebar Simplificado */}
       <motion.div
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        className="fixed top-1/3 left-8 transform z-50 hidden md:block"
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="fixed top-1/3 left-4 z-50 hidden md:block"
       >
-        <div className="bg-gray-900/80 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-4 shadow-2xl">
-          <nav className="flex flex-col space-y-4">
-            {/* Home */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveSection("home")}
-              className={`p-3 rounded-xl transition-all duration-300 ${
-                activeSection === "home"
-                  ? "bg-teal-400 text-black shadow-lg shadow-teal-400/25"
-                  : "text-gray-400 hover:text-white hover:bg-gray-800/50"
-              }`}
-              title={t.home}
-            >
-              <Home className="w-6 h-6" />
-            </motion.button>
-
-            {/* Portfolio */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveSection("portfolio")}
-              className={`p-3 rounded-xl transition-all duration-300 ${
-                activeSection === "portfolio"
-                  ? "bg-teal-400 text-black shadow-lg shadow-teal-400/25"
-                  : "text-gray-400 hover:text-white hover:bg-gray-800/50"
-              }`}
-              title={t.portfolio}
-            >
-              <Briefcase className="w-6 h-6" />
-            </motion.button>
-
-            {/* Resume */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveSection("resume")}
-              className={`p-3 rounded-xl transition-all duration-300 ${
-                activeSection === "resume"
-                  ? "bg-teal-400 text-black shadow-lg shadow-teal-400/25"
-                  : "text-gray-400 hover:text-white hover:bg-gray-800/50"
-              }`}
-              title={t.resume}
-            >
-              <User className="w-6 h-6" />
-            </motion.button>
-
-            {/* Contact */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveSection("contact")}
-              className={`p-3 rounded-xl transition-all duration-300 ${
-                activeSection === "contact"
-                  ? "bg-teal-400 text-black shadow-lg shadow-teal-400/25"
-                  : "text-gray-400 hover:text-white hover:bg-gray-800/50"
-              }`}
-              title={t.contact}
-            >
-              <MessageCircle className="w-6 h-6" />
-            </motion.button>
-
+        <div className="bg-black/50 rounded-lg p-2">
+          <nav className="flex flex-col space-y-2">
+            {[
+              { id: "home", icon: Home, label: t.home },
+              { id: "portfolio", icon: Briefcase, label: t.portfolio },
+              { id: "resume", icon: User, label: t.resume },
+              { id: "contact", icon: MessageCircle, label: t.contact },
+            ].map(item => {
+              const Icon = item.icon
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveSection(item.id)}
+                  className={`p-3 rounded-md transition-colors duration-200 ${
+                    activeSection === item.id
+                      ? "text-yellow-400"
+                      : "text-gray-400 hover:text-yellow-400"
+                  }`}
+                  title={item.label}
+                >
+                  <Icon className="w-5 h-5" />
+                </button>
+              )
+            })}
+            
             {/* Language Selector */}
-            <div className="pt-4 border-t border-gray-700/50">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
+            <div className="pt-2 border-t border-gray-700/50">
+              <button
                 onClick={() => setLanguage(language === "pt" ? "en" : "pt")}
-                className="p-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 w-full flex items-center justify-center"
-                title="Change Language"
+                className="p-3 rounded-md text-gray-400 hover:text-yellow-400 transition-colors duration-200 w-full flex items-center justify-center"
+                title="Mudar Idioma"
               >
-                <Globe className="w-6 h-6" />
-              </motion.button>
-              <div className="text-center mt-2">
-                <span className="text-xs text-teal-400 font-medium">{language.toUpperCase()}</span>
-              </div>
+                <Globe className="w-5 h-5" />
+              </button>
             </div>
           </nav>
         </div>
@@ -468,111 +432,43 @@ export default function FuturisticPortfolio() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="fixed top-6 right-6 z-50 md:hidden bg-gray-900/80 backdrop-blur-xl border border-gray-700/50 p-3 rounded-xl shadow-2xl"
+        className="fixed top-6 right-6 z-50 md:hidden bg-black/70 backdrop-blur-sm border border-white/10 p-3 rounded-lg"
       >
-        {isMobileMenuOpen ? <X className="w-6 h-6 text-teal-400" /> : <Menu className="w-6 h-6 text-teal-400" />}
+        {isMobileMenuOpen ? <X className="w-6 h-6 text-yellow-400" /> : <Menu className="w-6 h-6 text-yellow-400" />}
       </motion.button>
 
-      {/* Mobile Menu - Agora com a mesma estética do menu desktop */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed top-20 right-6 z-40 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 md:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
           >
-            <div className="bg-gray-900/80 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-4 shadow-2xl">
-              <nav className="flex flex-col space-y-4">
-                {/* Home */}
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setActiveSection("home")
-                    setIsMobileMenuOpen(false)
-                  }}
-                  className={`p-3 rounded-xl transition-all duration-300 ${
-                    activeSection === "home"
-                      ? "bg-teal-400 text-black shadow-lg shadow-teal-400/25"
-                      : "text-gray-400 hover:text-white hover:bg-gray-800/50"
-                  }`}
-                  title={t.home}
-                >
-                  <Home className="w-6 h-6" />
-                </motion.button>
-
-                {/* Portfolio */}
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setActiveSection("portfolio")
-                    setIsMobileMenuOpen(false)
-                  }}
-                  className={`p-3 rounded-xl transition-all duration-300 ${
-                    activeSection === "portfolio"
-                      ? "bg-teal-400 text-black shadow-lg shadow-teal-400/25"
-                      : "text-gray-400 hover:text-white hover:bg-gray-800/50"
-                  }`}
-                  title={t.portfolio}
-                >
-                  <Briefcase className="w-6 h-6" />
-                </motion.button>
-
-                {/* Resume */}
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setActiveSection("resume")
-                    setIsMobileMenuOpen(false)
-                  }}
-                  className={`p-3 rounded-xl transition-all duration-300 ${
-                    activeSection === "resume"
-                      ? "bg-teal-400 text-black shadow-lg shadow-teal-400/25"
-                      : "text-gray-400 hover:text-white hover:bg-gray-800/50"
-                  }`}
-                  title={t.resume}
-                >
-                  <User className="w-6 h-6" />
-                </motion.button>
-
-                {/* Contact */}
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setActiveSection("contact")
-                    setIsMobileMenuOpen(false)
-                  }}
-                  className={`p-3 rounded-xl transition-all duration-300 ${
-                    activeSection === "contact"
-                      ? "bg-teal-400 text-black shadow-lg shadow-teal-400/25"
-                      : "text-gray-400 hover:text-white hover:bg-gray-800/50"
-                  }`}
-                  title={t.contact}
-                >
-                  <MessageCircle className="w-6 h-6" />
-                </motion.button>
-
-                {/* Language Selector */}
-                <div className="pt-4 border-t border-gray-700/50">
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setLanguage(language === "pt" ? "en" : "pt")}
-                    className="p-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 w-full flex items-center justify-center"
-                    title="Change Language"
-                  >
-                    <Globe className="w-6 h-6" />
-                  </motion.button>
-                  <div className="text-center mt-2">
-                    <span className="text-xs text-teal-400 font-medium">{language.toUpperCase()}</span>
-                  </div>
-                </div>
-              </nav>
-            </div>
+             <motion.div
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -100, opacity: 0 }}
+                className="bg-gray-900/90 border-b border-white/10 p-4"
+                onClick={e => e.stopPropagation()}
+             >
+                <nav className="flex justify-around">
+                    {sections.map(sec => (
+                        <button
+                            key={sec}
+                            onClick={() => {
+                                setActiveSection(sec)
+                                setIsMobileMenuOpen(false)
+                            }}
+                            className={`capitalize text-lg transition-colors duration-200 ${activeSection === sec ? 'text-yellow-400' : 'text-gray-300'}`}
+                        >
+                            {t[sec as keyof typeof t]}
+                        </button>
+                    ))}
+                </nav>
+             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -583,63 +479,64 @@ export default function FuturisticPortfolio() {
           {activeSection === "home" && (
             <motion.section
               key="home"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
               className="min-h-screen flex items-center justify-center px-6 pt-24 md:pt-0"
             >
               <div className="text-center max-w-4xl">
                 <motion.h1
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="text-4xl md:text-6xl lg:text-8xl font-bold mb-6 bg-gradient-to-r from-teal-400 via-emerald-500 to-green-600 bg-clip-text text-transparent glow-text"
+                  transition={{ delay: 0.1, duration: 0.5 }}
+                  className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 bg-clip-text text-transparent glow-text-yellow"
                 >
                   {t.name}
                 </motion.h1>
                 <motion.p
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="text-lg md:text-xl lg:text-2xl text-gray-300 mb-8"
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="text-lg md:text-xl text-gray-300 mb-6"
                 >
                   {t.role}
                 </motion.p>
                 <motion.p
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                  className="text-base md:text-lg text-gray-400 mb-12 max-w-2xl mx-auto"
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  className="text-base text-gray-400 mb-10 max-w-2xl mx-auto"
                 >
                   {t.description}
                 </motion.p>
 
                 {/* Specialty Cards */}
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 }}
-                  className="grid md:grid-cols-3 gap-6 mb-12"
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                  className="grid md:grid-cols-3 gap-6 mb-10"
                 >
                   {t.specialties.map((item, index) => (
                     <motion.div
                       key={index}
-                      whileHover={{ scale: 1.05, y: -10 }}
-                      className="glass-card p-6 rounded-xl backdrop-blur-md bg-white/5 border border-teal-400/20 hover:border-teal-400/40 transition-all duration-300"
+                      whileHover={{ y: -5 }}
+                      className="glass-card p-6 rounded-lg bg-white/5 border border-yellow-400/20 hover:border-yellow-400/30 transition-all duration-200"
                     >
-                      {index === 0 && <Palette className="w-12 h-12 text-teal-400 mx-auto mb-4" />}
-                      {index === 1 && <Zap className="w-12 h-12 text-teal-400 mx-auto mb-4" />}
-                      {index === 2 && <Code className="w-12 h-12 text-teal-400 mx-auto mb-4" />}
-                      <h3 className="text-xl font-semibold mb-2 text-white">{item.title}</h3>
-                      <p className="text-gray-400">{item.desc}</p>
+                      {index === 0 && <Palette className="w-10 h-10 text-yellow-400 mx-auto mb-3" />}
+                      {index === 1 && <Zap className="w-10 h-10 text-yellow-400 mx-auto mb-3" />}
+                      {index === 2 && <Code className="w-10 h-10 text-yellow-400 mx-auto mb-3" />}
+                      <h3 className="text-lg font-semibold mb-1 text-white">{item.title}</h3>
+                      <p className="text-gray-400 text-sm">{item.desc}</p>
                     </motion.div>
                   ))}
                 </motion.div>
 
-                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }}>
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.5 }}>
                   <Button
                     onClick={() => setActiveSection("portfolio")}
-                    className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-500 hover:to-emerald-600 text-black font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 glow-button"
+                    className="bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black font-semibold px-8 py-3 rounded-full transition-all duration-200 transform hover:scale-105 glow-button-yellow"
                   >
                     {t.viewMyWork}
                   </Button>
@@ -648,269 +545,201 @@ export default function FuturisticPortfolio() {
             </motion.section>
           )}
 
-{activeSection === "portfolio" && (
-  <motion.section
-    key="portfolio"
-    initial={{ opacity: 0, y: 50 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -50 }}
-    className="min-h-screen py-20 px-6"
-  >
-    <div className="container mx-auto max-w-6xl">
-      <motion.h2
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-3xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-teal-400 to-emerald-500 bg-clip-text text-transparent glow-text"
-      >
-        {t.featuredProjects}
-      </motion.h2>
-      <div className="grid md:grid-cols-2 gap-8">
-        {projectsData.map((project, index) => (
-          <motion.div
-            key={project.id}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.2 }}
-            whileHover={{ scale: 1.02, y: -5 }}
-            className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-teal-400/10 via-emerald-500/10 to-green-600/10 border border-teal-400/20 hover:border-teal-400/40 transition-all duration-500"
-          >
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-400/5 via-transparent to-green-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-            <div className="relative overflow-hidden">
-              <img
-                src={project.image || "/placeholder.svg"}
-                alt={project.title[language as keyof typeof project.title]}
-                className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-
-              {/* Floating Category Badge */}
-              <div className="absolute top-4 left-4">
-                <span className="px-3 py-1 bg-teal-400/20 backdrop-blur-md text-teal-400 rounded-full text-sm border border-teal-400/30 glow-text">
-                  {project.category[language as keyof typeof project.category]}
-                </span>
-              </div>
-            </div>
-
-            <div className="relative p-6">
-              <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-teal-400 transition-colors duration-300">
-                {project.title[language as keyof typeof project.title]}
-              </h3>
-              <p className="text-gray-400 mb-4 leading-relaxed">
-                {project.description[language as keyof typeof project.description]}
-              </p>
-
-              <div className="flex flex-wrap gap-2 mb-6">
-                {project.tech.map((tech, techIndex) => (
-                  <span
-                    key={techIndex}
-                    className="px-3 py-1 bg-white/5 backdrop-blur-sm text-gray-300 rounded-full text-sm border border-white/10 hover:border-teal-400/30 hover:text-teal-400 transition-all duration-300"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex space-x-3">
-                <Button
-                  variant="outline"
-                  onClick={() => window.open(project.link, '_blank')}
-                  className="flex-1 bg-transparent border-teal-400/30 text-teal-400 hover:bg-teal-400/10 hover:border-teal-400 hover:shadow-lg hover:shadow-teal-400/25 transition-all duration-500 rounded-full font-semibold group cursor-pointer"
-                >
-                  <Eye className="w-4 h-4 mr-2 group-hover:animate-pulse" />
-                  <span className="group-hover:bg-gradient-to-r group-hover:from-teal-400 group-hover:to-emerald-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-500">
-                    {t.viewProject}
-                  </span>
-                </Button>
-                <Button
-                  size="icon"
-                  onClick={() => window.open(project.link, '_blank')}
-                  className="bg-transparent border border-teal-400/30 text-teal-400 hover:bg-teal-400/10 hover:border-teal-400 hover:shadow-lg hover:shadow-teal-400/25 transition-all duration-500 rounded-full group cursor-pointer"
-                >
-                  <ExternalLink className="w-4 h-4 group-hover:text-white group-hover:scale-110 transition-all duration-300" />
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </motion.section>
-)}
-
-          {activeSection === "resume" && (
+          {activeSection === "portfolio" && (
             <motion.section
-              key="resume"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
+              key="portfolio"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
               className="min-h-screen py-20 px-6"
             >
               <div className="container mx-auto max-w-6xl">
                 <motion.h2
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-3xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-teal-400 to-emerald-500 bg-clip-text text-transparent glow-text"
+                  className="text-3xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent glow-text-yellow"
+                >
+                  {t.featuredProjects}
+                </motion.h2>
+                <div className="grid md:grid-cols-2 gap-8">
+                  {projectsData.map((project, index) => (
+                    <motion.div
+                      key={project.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1, duration: 0.5 }}
+                      whileHover={{ y: -5 }}
+                      className="group relative rounded-lg overflow-hidden bg-white/5 border border-yellow-400/20 hover:border-yellow-400/30 transition-all duration-200"
+                    >
+                      <div className="relative overflow-hidden">
+                        <img
+                          src={project.image || "/placeholder.svg"}
+                          alt={project.title[language as keyof typeof project.title]}
+                          className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div className="absolute top-4 left-4">
+                          <span className="px-3 py-1 bg-yellow-400/10 backdrop-blur-sm text-yellow-400 rounded-full text-xs border border-yellow-400/20">
+                            {project.category[language as keyof typeof project.category]}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-6">
+                        <h3 className="text-xl font-bold mb-2 text-white group-hover:text-yellow-400 transition-colors duration-200">
+                          {project.title[language as keyof typeof project.title]}
+                        </h3>
+                        <p className="text-gray-400 mb-4 text-sm leading-relaxed">
+                          {project.description[language as keyof typeof project.description]}
+                        </p>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {project.tech.map((tech, techIndex) => (
+                            <span
+                              key={techIndex}
+                              className="px-2 py-1 bg-white/5 text-gray-300 rounded-full text-xs border border-white/10"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                        <Button
+                          variant="outline"
+                          onClick={() => window.open(project.link, '_blank')}
+                          className="w-full bg-transparent border-yellow-400/30 text-yellow-400 hover:bg-yellow-400/10 hover:border-yellow-400/50 transition-all duration-200 rounded-lg font-semibold"
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          {t.viewProject}
+                        </Button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.section>
+          )}
+
+          {activeSection === "resume" && (
+            <motion.section
+              key="resume"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="min-h-screen py-20 px-6"
+            >
+              <div className="container mx-auto max-w-6xl">
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-3xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent glow-text-yellow"
                 >
                   {t.experienceSkills}
                 </motion.h2>
 
                 <div className="grid lg:grid-cols-3 gap-8">
-                  {/* Experience Section - 2 columns */}
                   <div className="lg:col-span-2">
-                    <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} className="mb-12">
-                      <h3 className="text-2xl md:text-3xl font-bold mb-8 text-white flex items-center">
-                        <Briefcase className="w-8 h-8 text-teal-400 mr-3" />
+                    <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
+                      <h3 className="text-2xl font-bold mb-6 text-white flex items-center">
+                        <Briefcase className="w-6 h-6 text-yellow-400 mr-3" />
                         {t.professionalExperience}
                       </h3>
-
-                      <div className="relative">
-                        {/* Timeline Line */}
-                        <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-teal-400 via-emerald-500 to-green-600"></div>
-
-                        <div className="space-y-8">
-                          {t.experiences.map((exp, index) => (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, x: -50 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: index * 0.2 }}
-                              className="relative flex items-start"
-                            >
-                              {/* Timeline Dot */}
-                              <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-teal-400 to-emerald-500 rounded-full flex items-center justify-center text-black font-bold text-sm z-10 shadow-lg shadow-teal-400/25">
-                                <span className="text-xs">{exp.startYear.slice(-2)}</span>
-                              </div>
-
-                              {/* Content Card */}
-                              <motion.div
-                                whileHover={{ scale: 1.02, x: 10 }}
-                                className="ml-6 flex-1 glass-card p-6 rounded-2xl backdrop-blur-md bg-white/5 border border-teal-400/20 hover:border-teal-400/40 transition-all duration-300 group"
-                              >
-                                <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-3">
-                                  <div>
-                                    <h4 className="text-lg md:text-xl font-bold text-white group-hover:text-teal-400 transition-colors duration-300">
-                                      {exp.title}
-                                    </h4>
-                                    <p className="text-teal-400 font-semibold">{exp.company}</p>
-                                  </div>
-                                  <div className="mt-2 md:mt-0">
-                                    <span className="px-3 py-1 bg-teal-400/20 text-teal-400 rounded-full text-sm border border-teal-400/30">
-                                      {exp.startYear} - {exp.endYear || (language === "pt" ? "Atual" : "Present")}
-                                    </span>
-                                  </div>
+                      <div className="relative space-y-6">
+                        <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gradient-to-b from-yellow-400 via-amber-500 to-orange-500"></div>
+                        {t.experiences.map((exp, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1, duration: 0.5 }}
+                            className="relative flex items-start pl-10"
+                          >
+                            <div className="absolute left-0 top-1 flex-shrink-0 w-6 h-6 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center text-black font-bold text-xs z-10">
+                              {exp.startYear.slice(-2)}
+                            </div>
+                            <div className="flex-1 glass-card p-4 rounded-lg bg-white/5 border border-yellow-400/20">
+                              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1">
+                                <div>
+                                  <h4 className="text-md font-bold text-white">{exp.title}</h4>
+                                  <p className="text-yellow-400 text-sm font-semibold">{exp.company}</p>
                                 </div>
-                                <p className="text-gray-400 text-sm md:text-base leading-relaxed">{exp.description}</p>
-                              </motion.div>
-                            </motion.div>
-                          ))}
-                        </div>
+                                <span className="text-xs text-gray-400 mt-1 sm:mt-0">
+                                  {exp.startYear} - {exp.endYear || (language === "pt" ? "Atual" : "Present")}
+                                </span>
+                              </div>
+                              <p className="text-gray-400 text-sm leading-relaxed">{exp.description}</p>
+                            </div>
+                          </motion.div>
+                        ))}
                       </div>
                     </motion.div>
                   </div>
 
-                  {/* Right Sidebar - Education & Certifications */}
                   <div className="lg:col-span-1 space-y-8">
-                    {/* Education */}
-                    <motion.div
-                      initial={{ opacity: 0, x: 50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 }}
-                    >
-                      <h3 className="text-xl md:text-2xl font-bold mb-6 text-white flex items-center">
-                        <User className="w-6 h-6 text-teal-400 mr-3" />
+                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
+                       <h3 className="text-2xl font-bold mb-6 text-white flex items-center">
+                        <Code className="w-6 h-6 text-yellow-400 mr-3" />
+                        {t.technicalSkills}
+                      </h3>
+                      <div className="space-y-4">
+                        {t.skills.map((skill, index) => (
+                          <div key={index} className="glass-card p-3 rounded-lg bg-white/5 border border-yellow-400/20">
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="text-white font-semibold text-sm">{skill.name}</span>
+                              <span className="text-yellow-400 text-sm font-bold">{skill.level}%</span>
+                            </div>
+                            <div className="w-full bg-gray-700/50 rounded-full h-2 overflow-hidden">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${skill.level}%` }}
+                                transition={{ delay: index * 0.1 + 0.5, duration: 0.8 }}
+                                className="bg-gradient-to-r from-yellow-400 to-amber-500 h-2 rounded-full"
+                              ></motion.div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                    
+                    {/* SEÇÕES RESTAURADAS AQUI */}
+                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+                      <h3 className="text-2xl font-bold mb-6 text-white flex items-center">
+                        <User className="w-6 h-6 text-yellow-400 mr-3" />
                         {t.education}
                       </h3>
                       <div className="space-y-4">
                         {t.educationData.map((edu, index) => (
-                          <motion.div
-                            key={index}
-                            whileHover={{ scale: 1.05 }}
-                            className="glass-card p-4 rounded-xl backdrop-blur-md bg-white/5 border border-teal-400/20 hover:border-teal-400/40 transition-all duration-300"
-                          >
+                          <div key={index} className="glass-card p-4 rounded-lg bg-white/5 border border-yellow-400/20">
                             <h4 className="font-bold text-white text-sm mb-1">{edu.degree}</h4>
-                            <p className="text-teal-400 text-sm mb-2">{edu.institution}</p>
+                            <p className="text-yellow-400 text-sm mb-2">{edu.institution}</p>
                             <div className="flex justify-between items-center">
                               <span className="text-gray-400 text-xs">{edu.year}</span>
-                              <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded-full text-xs">
+                              <span className={`px-2 py-1 rounded-full text-xs ${edu.status === 'Concluído' || edu.status === 'Completed' ? 'bg-green-500/20 text-green-400' : 'bg-blue-500/20 text-blue-400'}`}>
                                 {edu.status}
                               </span>
                             </div>
-                          </motion.div>
+                          </div>
                         ))}
                       </div>
                     </motion.div>
 
-                    {/* Certifications */}
-                    <motion.div
-                      initial={{ opacity: 0, x: 50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.5 }}
-                    >
-                      <h3 className="text-xl md:text-2xl font-bold mb-6 text-white flex items-center">
-                        <Zap className="w-6 h-6 text-teal-400 mr-3" />
+                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.3 }}>
+                      <h3 className="text-2xl font-bold mb-6 text-white flex items-center">
+                        <Zap className="w-6 h-6 text-yellow-400 mr-3" />
                         {t.certifications}
                       </h3>
                       <div className="space-y-4">
                         {t.certificationsData.map((cert, index) => (
-                          <motion.div
-                            key={index}
-                            whileHover={{ scale: 1.05 }}
-                            className="glass-card p-4 rounded-xl backdrop-blur-md bg-white/5 border border-teal-400/20 hover:border-teal-400/40 transition-all duration-300 group"
-                          >
-                            <h4 className="font-bold text-white text-sm mb-1 group-hover:text-teal-400 transition-colors">
-                              {cert.name}
-                            </h4>
-                            <p className="text-teal-400 text-sm mb-2">{cert.issuer}</p>
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-xs">{cert.year}</span>
-                              <span className="text-gray-500 text-xs font-mono">{cert.credential}</span>
-                            </div>
-                          </motion.div>
+                          <div key={index} className="glass-card p-4 rounded-lg bg-white/5 border border-yellow-400/20">
+                            <h4 className="font-bold text-white text-sm mb-1">{cert.name}</h4>
+                            <p className="text-yellow-400 text-sm mb-2">{cert.issuer}</p>
+                            <span className="text-gray-400 text-xs">{cert.year}</span>
+                          </div>
                         ))}
                       </div>
                     </motion.div>
+
                   </div>
                 </div>
-
-                {/* Technical Skills - Mantido como estava, mas com melhor espaçamento */}
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                  className="mt-16"
-                >
-                  <h3 className="text-2xl md:text-3xl font-bold mb-8 text-white flex items-center justify-center">
-                    <Code className="w-8 h-8 text-teal-400 mr-3" />
-                    {t.technicalSkills}
-                  </h3>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {t.skills.map((skill, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 + 0.8 }}
-                        whileHover={{ scale: 1.05 }}
-                        className="glass-card p-6 rounded-xl backdrop-blur-md bg-white/5 border border-teal-400/20 hover:border-teal-400/40 transition-all duration-300"
-                      >
-                        <div className="flex justify-between items-center mb-3">
-                          <span className="text-white font-semibold text-sm md:text-base">{skill.name}</span>
-                          <span className="text-teal-400 text-sm md:text-base font-bold">{skill.level}%</span>
-                        </div>
-                        <div className="w-full bg-gray-700/50 rounded-full h-3 overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${skill.level}%` }}
-                            transition={{ delay: index * 0.1 + 1, duration: 1.5, ease: "easeOut" }}
-                            className="bg-gradient-to-r from-teal-400 to-emerald-500 h-3 rounded-full shadow-lg shadow-teal-400/25"
-                          ></motion.div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
               </div>
             </motion.section>
           )}
@@ -918,92 +747,89 @@ export default function FuturisticPortfolio() {
           {activeSection === "contact" && (
             <motion.section
               key="contact"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              className="min-h-screen py-20 px-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="min-h-screen py-20 px-6 flex items-center justify-center"
             >
-              <div className="container mx-auto max-w-4xl">
+              <div className="container mx-auto max-w-md">
                 <motion.h2
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-3xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-teal-400 to-emerald-500 bg-clip-text text-transparent glow-text"
+                  className="text-3xl md:text-5xl font-bold text-center mb-10 bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent glow-text-yellow"
                 >
                   {t.getInTouch}
                 </motion.h2>
 
-<div className="flex justify-center">
-  {/* Contact Info & Socials */}
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.2 }}
-    className="space-y-8 w-full max-w-md"
-  >
-    <div className="glass-card p-6 rounded-xl backdrop-blur-md bg-white/5 border border-teal-400/20">
-      <h3 className="text-xl md:text-2xl font-bold mb-6 text-white">{t.contactInformation}</h3>
-      <div className="space-y-4">
-        <div className="flex items-center space-x-4">
-          <Mail className="w-6 h-6 text-teal-400" />
-          <span className="text-gray-300 text-sm md:text-base">eu@luanchicale.com.br</span>
-        </div>
-        <div className="flex items-center space-x-4">
-          <Phone className="w-6 h-6 text-teal-400" />
-          <span className="text-gray-300 text-sm md:text-base">+55 (11) 96214-0166</span>
-        </div>
-        <div className="flex items-center space-x-4">
-          <MapPin className="w-6 h-6 text-teal-400" />
-          <span className="text-gray-300 text-sm md:text-base">São Paulo, SP</span>
-        </div>
-      </div>
-    </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1, duration: 0.5 }}
+                  className="space-y-6"
+                >
+                  <div className="glass-card p-6 rounded-lg bg-white/5 border border-yellow-400/20">
+                    <h3 className="text-xl font-bold mb-4 text-white">{t.contactInformation}</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-3">
+                        <Mail className="w-5 h-5 text-yellow-400" />
+                        <span className="text-gray-300">eu@luanchicale.com.br</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Phone className="w-5 h-5 text-yellow-400" />
+                        <span className="text-gray-300">+55 (11) 96214-0166</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <MapPin className="w-5 h-5 text-yellow-400" />
+                        <span className="text-gray-300">São Paulo, SP</span>
+                      </div>
+                    </div>
+                  </div>
 
-    <div className="glass-card p-6 rounded-xl backdrop-blur-md bg-white/5 border border-teal-400/20">
-      <h3 className="text-lg md:text-xl font-bold mb-4 text-white">{t.followMe}</h3>
-      <div className="flex justify-center space-x-4">
-        <motion.a
-          href={socialLinks.email}
-          whileHover={{ scale: 1.1, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-          className="w-12 h-12 bg-gradient-to-r from-teal-400 to-emerald-500 rounded-full flex items-center justify-center text-black hover:shadow-lg hover:shadow-teal-400/25 transition-all duration-300"
-        >
-          <Mail className="w-6 h-6" />
-        </motion.a>
-        <motion.a
-          href={socialLinks.instagram}
-          whileHover={{ scale: 1.1, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-          className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300"
-        >
-          <Instagram className="w-6 h-6" />
-        </motion.a>
-        <motion.a
-          href={socialLinks.linkedin}
-          whileHover={{ scale: 1.1, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-          className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center text-white hover:shadow-lg hover:shadow-blue-600/25 transition-all duration-300"
-        >
-          <Linkedin className="w-6 h-6" />
-        </motion.a>
-        <motion.a
-          href={socialLinks.behance}
-          whileHover={{ scale: 1.1, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-          className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
-        >
-          <BehanceIcon />
-        </motion.a>
-      </div>
-    </div>
-  </motion.div>
-</div>
+                  <div className="glass-card p-6 rounded-lg bg-white/5 border border-yellow-400/20">
+                    <h3 className="text-xl font-bold mb-4 text-white text-center">{t.followMe}</h3>
+                    <div className="flex justify-center space-x-4">
+                      <motion.a href={socialLinks.email} whileHover={{ y: -3 }} className="p-3 bg-white/10 rounded-full text-yellow-400 hover:bg-white/20 transition-all"> <Mail className="w-6 h-6" /> </motion.a>
+                      <motion.a href={socialLinks.instagram} whileHover={{ y: -3 }} className="p-3 bg-white/10 rounded-full text-yellow-400 hover:bg-white/20 transition-all"> <Instagram className="w-6 h-6" /> </motion.a>
+                      <motion.a href={socialLinks.linkedin} whileHover={{ y: -3 }} className="p-3 bg-white/10 rounded-full text-yellow-400 hover:bg-white/20 transition-all"> <Linkedin className="w-6 h-6" /> </motion.a>
+                      <motion.a href={socialLinks.behance} whileHover={{ y: -3 }} className="p-3 bg-white/10 rounded-full text-yellow-400 hover:bg-white/20 transition-all"> <BehanceIcon /> </motion.a>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
             </motion.section>
           )}
         </AnimatePresence>
       </main>
+      
+      <footer className="relative z-10 py-6 px-6 text-center">
+        <div className="max-w-6xl mx-auto border-t border-white/10 pt-6">
+            <p className="text-sm text-gray-400">
+                Copyright © {new Date().getFullYear()} Luan Chicale por{" "}
+                <a 
+                    href="https://enchante.digital" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-yellow-400 hover:underline"
+                >
+                    enchante.digital
+                </a>
+            </p>
+            <p className="text-xs text-gray-500 mt-2">
+                Design de portfólio sob licensa pessoal por{" "}
+                <a 
+                    href="https://kriativa.art" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-yellow-400 hover:underline"
+                >
+                    Kriativa.art
+                </a>
+            </p>
+        </div>
+      </footer>
 
-      <style jsx>{`
+      <style jsx="true">{`
         .particles-container {
           position: absolute;
           width: 100%;
@@ -1015,10 +841,10 @@ export default function FuturisticPortfolio() {
           position: absolute;
           width: 2px;
           height: 2px;
-          background: #00D4AA;
+          background: #FBBF24; /* amber-400 */
           border-radius: 50%;
           animation: float linear infinite;
-          opacity: 0.7;
+          opacity: 0;
         }
         
         @keyframes float {
@@ -1026,11 +852,8 @@ export default function FuturisticPortfolio() {
             transform: translateY(100vh) translateX(0px);
             opacity: 0;
           }
-          10% {
-            opacity: 1;
-          }
-          90% {
-            opacity: 1;
+          10%, 90% {
+            opacity: 0.7;
           }
           100% {
             transform: translateY(-100px) translateX(100px);
@@ -1038,17 +861,17 @@ export default function FuturisticPortfolio() {
           }
         }
         
-        .glow-text {
-          text-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+        .glow-text-yellow {
+          text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
         }
         
-        .glow-button {
-          box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
+        .glow-button-yellow {
+          box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
         }
         
         .glass-card {
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
         }
       `}</style>
     </div>
